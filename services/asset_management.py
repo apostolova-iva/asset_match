@@ -2,6 +2,7 @@ import os
 import json
 import logging
 
+
 class AssetProcessor:
     """
     AssetProcessor is responsible for handling the processing of asset files.
@@ -26,18 +27,29 @@ class AssetProcessor:
             list: A list of file paths to JSON files in the directory.
         """
         try:
-            files = [os.path.join(self.directory, filename) for filename in os.listdir(self.directory)
-                     if filename.endswith('.json')]
-            logging.info(f"Found {len(files)} JSON files in directory: {self.directory}")
+            files = [
+                os.path.join(self.directory, filename)
+                for filename in os.listdir(self.directory)
+                if filename.endswith(".json")
+            ]
+            logging.info(
+                f"Found {len(files)} JSON files in directory: {self.directory}"
+            )
             return files
         except FileNotFoundError:
-            logging.error(f"Directory not found: {self.directory}. Please ensure the directory exists.")
+            logging.error(
+                f"Directory not found: {self.directory}. Please ensure the directory exists."
+            )
             return []
         except PermissionError:
-            logging.error(f"Permission denied for directory: {self.directory}. Check directory permissions.")
+            logging.error(
+                f"Permission denied for directory: {self.directory}. Check directory permissions."
+            )
             return []
         except Exception as e:
-            logging.error(f"An unexpected error occurred while accessing the directory: {self.directory}. Error: {e}")
+            logging.error(
+                f"An unexpected error occurred while accessing the directory: {self.directory}. Error: {e}"
+            )
             return []
 
     def read_json_file(self, file_path):
@@ -51,12 +63,12 @@ class AssetProcessor:
             dict: A dictionary representing asset information extracted from the JSON file.
         """
         try:
-            with open(file_path, 'r') as file:
+            with open(file_path, "r") as file:
                 logging.info(f"Reading JSON file: {file_path}")
                 data = json.load(file)
 
-                if isinstance(data, dict) and 'assets' in data:
-                    assets = data['assets']
+                if isinstance(data, dict) and "assets" in data:
+                    assets = data["assets"]
                 elif isinstance(data, list):
                     assets = data
                 else:
@@ -67,13 +79,19 @@ class AssetProcessor:
                     yield asset
 
         except FileNotFoundError:
-            logging.error(f"File not found: {file_path}. Please ensure the file exists.")
+            logging.error(
+                f"File not found: {file_path}. Please ensure the file exists."
+            )
         except PermissionError:
-            logging.error(f"Permission denied for file: {file_path}. Check file permissions.")
+            logging.error(
+                f"Permission denied for file: {file_path}. Check file permissions."
+            )
         except json.JSONDecodeError as e:
             logging.error(f"Error decoding JSON in file {file_path}: {e}")
         except Exception as e:
-            logging.error(f"An unexpected error occurred while reading the file {file_path}: {e}")
+            logging.error(
+                f"An unexpected error occurred while reading the file {file_path}: {e}"
+            )
 
     def extract_asset_info(self, asset):
         """
@@ -86,22 +104,26 @@ class AssetProcessor:
             dict or None: A dictionary with 'Name', 'Model', and 'IP Address' if all fields are found, otherwise None.
         """
         try:
-            name = asset.get('name') or asset.get('name_snmp') or asset.get('asset-name')
-            model = asset.get('model') or asset.get('asset-model')
-            ip_address = asset.get('ip_address') or asset.get('ipv4') or asset.get('ip-address')
+            name = (
+                asset.get("name") or asset.get("name_snmp") or asset.get("asset-name")
+            )
+            model = asset.get("model") or asset.get("asset-model")
+            ip_address = (
+                asset.get("ip_address") or asset.get("ipv4") or asset.get("ip-address")
+            )
 
             if name and model and ip_address:
-                logging.debug(f"Asset extracted: Name={name}, Model={model}, IP Address={ip_address}")
-                return {
-                    'Name': name,
-                    'Model': model,
-                    'IP Address': ip_address
-                }
+                logging.debug(
+                    f"Asset extracted: Name={name}, Model={model}, IP Address={ip_address}"
+                )
+                return {"Name": name, "Model": model, "IP Address": ip_address}
             else:
                 logging.debug(f"Asset skipped due to missing fields: {asset}")
                 return None
         except Exception as e:
-            logging.error(f"An error occurred while extracting asset information. Error: {e}")
+            logging.error(
+                f"An error occurred while extracting asset information. Error: {e}"
+            )
             return None
 
 
@@ -131,7 +153,9 @@ class AssetManager:
         all_assets = []
         try:
             json_files = self.asset_processor.list_json_files()
-            logging.info(f"Starting to collect assets from {len(json_files)} JSON files")
+            logging.info(
+                f"Starting to collect assets from {len(json_files)} JSON files"
+            )
 
             for file_path in json_files:
                 for asset in self.asset_processor.read_json_file(file_path):
@@ -140,7 +164,9 @@ class AssetManager:
                         all_assets.append(extracted_asset)
                         # Log every 5 assets to avoid excessive logging
                         if len(all_assets) % 5 == 0:
-                            logging.debug(f"Collected {len(all_assets)} assets so far...")
+                            logging.debug(
+                                f"Collected {len(all_assets)} assets so far..."
+                            )
 
         except ValueError as ve:
             logging.error(f"Skipping file {file_path} due to a data format error: {ve}")
@@ -166,12 +192,14 @@ class AssetManager:
         end = start + per_page
         paginated_assets = all_assets[start:end]
 
-        logging.info(f"Returning {len(paginated_assets)} assets for page {page} with {per_page} per page")
+        logging.info(
+            f"Returning {len(paginated_assets)} assets for page {page} with {per_page} per page"
+        )
         return {
-            'assets': paginated_assets,
-            'total': len(all_assets),
-            'page': page,
-            'per_page': per_page
+            "assets": paginated_assets,
+            "total": len(all_assets),
+            "page": page,
+            "per_page": per_page,
         }
 
     def match_asset(self, search_query):
@@ -193,19 +221,23 @@ class AssetManager:
                     extracted_asset = self.asset_processor.extract_asset_info(asset)
                     if extracted_asset:
                         # Check if the search query matches any of the fields
-                        if (search_query in extracted_asset['IP Address'].lower() or
-                            search_query in extracted_asset['Model'].lower() or
-                            search_query in extracted_asset['Name'].lower()):
-                            logging.info(f"Match found for query '{search_query}': {extracted_asset}")
+                        if (
+                            search_query in extracted_asset["IP Address"].lower()
+                            or search_query in extracted_asset["Model"].lower()
+                            or search_query in extracted_asset["Name"].lower()
+                        ):
+                            logging.info(
+                                f"Match found for query '{search_query}': {extracted_asset}"
+                            )
                             return extracted_asset  # Return the first matched asset
 
             logging.info(f"No match found for query: {search_query}")
-            return {'message': 'No Asset Found'}  # No matches found
+            return {"message": "No Asset Found"}  # No matches found
         except ValueError as ve:
             logging.error(f"Skipping file {file_path} due to a data format error: {ve}")
         except Exception as e:
             logging.error(f"An error occurred during asset matching. Error: {e}")
-            return {'message': 'Error during search'}
+            return {"message": "Error during search"}
 
 
 class AssetService:
@@ -237,10 +269,12 @@ class AssetService:
         """
         try:
             logging.info(f"Fetching paginated assets: page={page}, per_page={per_page}")
-            return self.asset_manager.collect_assets_paginated(page=page, per_page=per_page)
+            return self.asset_manager.collect_assets_paginated(
+                page=page, per_page=per_page
+            )
         except Exception as e:
             logging.error(f"Error in service layer during pagination: {e}")
-            return {'message': 'Error fetching assets'}
+            return {"message": "Error fetching assets"}
 
     def find_asset_by_query(self, search_query):
         """
@@ -257,4 +291,4 @@ class AssetService:
             return self.asset_manager.match_asset(search_query)
         except Exception as e:
             logging.error(f"Error in service layer during search: {e}")
-            return {'message': 'Error during search'}
+            return {"message": "Error during search"}
