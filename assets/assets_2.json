@@ -1,0 +1,80 @@
+[
+    {
+        "id": 10,
+        "asset-name": "Some name",
+        "asset-model": "Some model",
+        "mac-address": "AA:BB:CC:DD:EE:01",
+        "ip-address": "192.168.77.1"
+    },
+    {
+        "id": 11,
+        "asset-name": "Another Test Device",
+        "asset-model": "Some model",
+        "mac-address": "AA:BB:CC:DD:EE:02",
+        "ip-address": "192.168.77.2"
+    },
+    {
+        "id": 12,
+        "asset-name": "Pixel Phone",
+        "asset-model": "Pixel-6",
+        "mac-address": "AA:BB:CC:DD:EE:03",
+        "ip-address": "192.168.77.3"
+    },
+    {
+        "id": 13,
+        "asset-name": "Ivans's phone",
+        "asset-model": "iPhone 15 Pro Max",
+        "mac-address": "AA:BB:CC:DD:EE:04",
+        "ip-address": "192.168.77.4"
+    },
+    {
+        "id": 14,
+        "asset-name": "BOSCH Oven",
+        "asset-model": "HRG5785S6",
+        "mac-address": "AA:BB:CC:DD:EE:05",
+        "ip-address": "192.168.77.5"
+    },
+    {
+        "id": 15,
+        "asset-name": "NanoBeam",
+        "asset-model": "airMax",
+        "mac-address": "AA:BB:CC:DD:EE:06",
+        "ip-address": "192.168.77.6"
+    },
+    {
+        "id": 16,
+        "asset-name": "Netgear Access Point",
+        "asset-model": "WAX620",
+        "mac-address": "AA:BB:CC:DD:EE:07",
+        "ip-address": "192.168.77.7"
+    },
+    {
+        "id": 17,
+        "asset-name": "Alexa",
+        "asset-model": "EchoEcho Show (1st Gen)",
+        "mac-address": "AA:BB:CC:DD:EE:08",
+        "ip-address": "192.168.77.8"
+    },
+    {
+        "id": 18,
+        "asset-name": "Office Camera",
+        "asset-model": "W5S",
+        "mac-address": "AA:BB:CC:DD:EE:09",
+        "ip-address": "192.168.77.9"
+    },
+    {
+        "id": 19,
+        "asset-name": "",
+        "asset-model": "Unknown",
+        "mac-address": "AA:BB:CC:DD:EE:10",
+        "ip-address": "192.168.77.10"
+    },
+    {
+        "id": 20,
+        "asset-name": "Philips Hue",
+        "asset-model": "Hue Bridge 2nd Gen",
+        "mac-address": "AA:BB:CC:DD:EE:FF",
+        "ip-address": "192.168.77.11"
+    }
+
+]
