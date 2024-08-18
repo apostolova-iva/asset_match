@@ -1,4 +1,6 @@
 import pytest
+import os
+import json
 from unittest.mock import patch, mock_open, MagicMock
 from services.asset_management import AssetProcessor, AssetManager, AssetService
 
@@ -14,8 +16,11 @@ def test_list_json_files(mock_listdir):
     processor = AssetProcessor('dummy_dir')
     files = processor.list_json_files()
 
+    # Normalize the paths to account for OS differences
+    expected_files = [os.path.join('dummy_dir', 'file1.json'), os.path.join('dummy_dir', 'file2.json')]
+
     assert len(files) == 2
-    assert files == ['dummy_dir/file1.json', 'dummy_dir/file2.json']
+    assert files == expected_files
 
 
 @patch('os.listdir')
